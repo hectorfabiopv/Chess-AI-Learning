@@ -1,6 +1,8 @@
 import React from 'react';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+import ChessBoard from './src/UI/ChessBoard'; // Asegúrate de que la ruta sea correcta
+
 
 // Obtener dimensiones de la pantalla
 const { width } = Dimensions.get('window'); // Ancho de la pantalla
@@ -91,32 +93,7 @@ const App = () => {
 
   return (
     <Container>
-      <ChessBoard boardSize={BOARD_SIZE}>
-        {board.map((row, rowIndex) =>
-          row.map((square, colIndex) => {
-            const piece = initialPieces.find(
-              (p) => p.row === rowIndex && p.col === colIndex
-            );
-
-            return (
-              <Square
-                key={`${rowIndex}-${colIndex}`}
-                color={square.color}
-                squareSize={SQUARE_SIZE}
-              >
-                {piece && (
-                  <Piece
-                    key={`${piece.type}-${piece.row}-${piece.col}`}
-                    source={pieceImage(piece.color, piece.type)}
-                    squareSize={SQUARE_SIZE}
-                    isBlackOnBlack={piece.color === 'black' && square.color === '#000000'}
-                  />
-                )}
-              </Square>
-            );
-          })
-        )}
-      </ChessBoard>
+      <ChessBoard boardSize={BOARD_SIZE} initialPieces={initialPieces} />
     </Container>
   );
 };
@@ -127,36 +104,6 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-`;
-
-const ChessBoard = styled.View<{ boardSize: number }>`
-  width: ${(props) => props.boardSize}px;
-  height: ${(props) => props.boardSize}px;
-  flex-wrap: wrap;
-  flex-direction: row;
-`;
-
-const Square = styled.View<{ color: string; squareSize: number }>`
-  width: ${(props) => props.squareSize}px;
-  height: ${(props) => props.squareSize}px;
-  background-color: ${(props) => props.color};
-  justify-content: center;
-  align-items: center;
-`;
-
-const Piece = styled.Image<{ squareSize: number; isBlackOnBlack?: boolean }>`
-  width: ${(props) => props.squareSize * 0.8}px;
-  height: ${(props) => props.squareSize * 0.8}px;
-  resizeMode: contain;
-  ${(props) =>
-    props.isBlackOnBlack &&
-    `
-      shadow-color: #ffffff;
-      shadow-offset: 0px 0px;
-      shadow-opacity: 1;
-      shadow-radius: 4px;
-      elevation: 5; /* Para Android */
-    `}
 `;
 
 export default App;
